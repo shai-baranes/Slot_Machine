@@ -1,3 +1,5 @@
+# TBD ask it to deposit more money for each new round
+
 import random
 
 class SlotMachine:
@@ -9,11 +11,17 @@ class SlotMachine:
     COLS = 3
     
     _symbol_count = {
-        "A": 2, "B": 4, "C": 6, "D": 8
+        "A": 2,
+        "B": 4,
+        "C": 6,
+        "D": 8
     }
     
     _symbol_value = {
-        "A": 5, "B": 4, "C": 3, "D": 2
+        "A": 5,
+        "B": 4,
+        "C": 3,
+        "D": 2
     }
 
     def __init__(self):
