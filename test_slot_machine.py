@@ -2,21 +2,24 @@ import pytest
 
 # Test Classes
 class TestDepositValidation:
-    @pytest.mark.parametrize("input_val, expected", [
-        (100, 100), 
-        ("500", 500),
-        (0, ValueError),
-        (-50, ValueError),
-        ("abc", ValueError)
+    @pytest.mark.parametrize("inputs,expected", [
+        (["0", "100"], 100),  # Invalid then valid
+        (["abc", "50"], 50),
+        (["-5", "a", "20"], 20),
+        # (["-5", "10", "20"], 20),
+        (["invalid", "invalid", "invalid"], ValueError)
     ])
-    def test_deposit_validation(self, machine, input_val, expected, monkeypatch):
-        monkeypatch.setattr('builtins.input', lambda _: str(input_val))
+    def test_deposit_validation(self, machine, inputs, expected, monkeypatch):
+        from itertools import cycle
+        monkeypatch.setattr('builtins.input', lambda _: next(cycle(inputs)))
+        
         if isinstance(expected, type) and issubclass(expected, Exception):
             with pytest.raises(expected):
-                machine.deposit()
+                machine.deposit(max_attempts=3)
         else:
             machine.deposit()
             assert machine.balance == expected
+
 
 class TestLineSelection:
     @pytest.mark.parametrize("lines, expected_error", [

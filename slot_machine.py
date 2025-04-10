@@ -46,15 +46,18 @@ class SlotMachine:
             raise ValueError("Exceeds current balance")
 
     ## Core Game Methods
-    def deposit(self):
-        while True:
+    def deposit(self, max_attempts=3): # maybe we can use this max attempts only for the testing phase
+    	attempts = 0
+    	while attempts < max_attempts:
             try:
                 amount = int(input("Deposit amount: $"))
                 self._validate_deposit(amount)
                 self.balance = amount
                 return
             except ValueError as e:
-                print(f"Invalid deposit: {e}")
+            	print(f"Invalid deposit: {e}")
+            	attempts+=1
+            raise ValueError("Too many invalid deposit attempts")
 
     def select_lines(self):
         while True:
