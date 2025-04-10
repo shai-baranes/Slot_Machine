@@ -39,37 +39,52 @@ class SlotMachine:
         if not 1 <= lines <= self.MAX_LINES:
             raise ValueError(f"Lines must be between 1-{self.MAX_LINES}")
 
+
     def _validate_bet(self, bet):
         if not self.MIN_BET <= bet <= self.MAX_BET:
-            raise ValueError(f"Bet must be ${self.MIN_BET}-${self.MAX_BET}")
-        if bet * self.lines > self.balance:
-            raise ValueError("Exceeds current balance")
+            raise ValueError(f"Bet must be between ${self.MIN_BET} and ${self.MAX_BET}")
+        if bet * self.lines > self.balance:  # Allow bets equal to or less than the balance
+            raise ValueError("Total bet exceeds current balance")
+
+
 
     ## Core Game Methods
     def deposit(self, max_attempts=3): # maybe we can use this max attempts only for the testing phase
-    	attempts = 0
-    	while attempts < max_attempts:
+        attempts = 0
+        while attempts < max_attempts:
             try:
                 amount = int(input("Deposit amount: $"))
                 self._validate_deposit(amount)
                 self.balance = amount
                 return
             except ValueError as e:
-            	print(f"Invalid deposit: {e}")
-            	attempts+=1
-            raise ValueError("Too many invalid deposit attempts")
+                print(f"Invalid deposit: {e}")
+                attempts+=1
+        raise ValueError("Too many invalid deposit attempts")   
 
-    def select_lines(self):
-        while True:
+
+
+    def select_lines(self, max_attempts=3):
+        attempts = 0
+        while attempts < max_attempts:
             try:
                 lines = int(input(f"Lines to bet (1-{self.MAX_LINES}): "))
                 self._validate_lines(lines)
                 self.lines = lines
                 return
             except ValueError as e:
-                print(f"Invalid lines: {e}")
+                print(f"Invalid input: {e}")
+                attempts += 1
+        raise ValueError("Too many invalid line selection attempts")
+
+
+
 
     def place_bet(self):
+        if self.balance <= 0:
+            raise ValueError("Cannot place a bet with zero or negative balance.")
+        # Existing logic for placing bets
+
         while True:
             try:
                 bet = int(input("Bet per line: $"))
@@ -103,19 +118,85 @@ class SlotMachine:
         for row in range(len(self.slots[0])):
             print(" | ".join(col[row] for col in self.slots))
 
+
+
+    # def calculate_winnings(self):
+    #     winnings = 0
+    #     winning_lines = []
+        
+    #     # Iterate over each row (assuming a 3x3 grid)
+    #     for i, row_index in enumerate(range(3)):  # Check rows 0, 1, 2  # TBD maybe call row_index -> col_index instead?
+    #         # Get symbols from each column in this row
+    #         symbols = [
+    #             self.slots[0][row_index],  # Column 0, current row
+    #             self.slots[1][row_index],  # Column 1, current row
+    #             self.slots[2][row_index]   # Column 2, current row
+    #         ]
+            
+    #         # Check if all symbols in this row are identical
+    #         if symbols[0] == symbols[1] == symbols[2]:
+    #             symbol = symbols[0]
+    #             if symbol in self._symbol_value:
+    #                 line_winnings = self.bet * self._symbol_value[symbol]
+    #                 winnings += line_winnings
+    #                 winning_lines.append(i + 1)  # 1-based index
+    #                 print(f"DEBUG: Row {i + 1} wins with symbol {symbol}, winnings: {line_winnings}")
+        
+    #     print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
+    #     self.balance += winnings
+    #     return winnings, winning_lines
+
+
     def calculate_winnings(self):
         winnings = 0
         winning_lines = []
         
-        for line in range(self.lines):
-            first_symbol = self.slots[0][line]
-            if all(col[line] == first_symbol for col in self.slots):
-                multiplier = self._symbol_value[first_symbol]
-                winnings += multiplier * self.bet
-                winning_lines.append(line + 1)
+        # Iterate over each row (assuming a 3x3 grid)
+        for row_index in range(3):  # Check rows 0, 1, 2  # TBD maybe call row_index -> col_index instead?
+            # Get symbols from each column in this row
+            symbols = [
+                self.slots[0][row_index],  # Column 0, current row
+                self.slots[1][row_index],  # Column 1, current row
+                self.slots[2][row_index]   # Column 2, current row
+            ]
+            
+            # Check if all symbols in this row are identical
+            if symbols[0] == symbols[1] == symbols[2]:
+                symbol = symbols[0]
+                if symbol in self._symbol_value:
+                    line_winnings = self.bet * self._symbol_value[symbol]
+                    winnings += line_winnings
+                    winning_lines.append(row_index + 1)  # 1-based index
+                    print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
         
-        self.balance += winnings  # Add winnings to balance
+        print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
+        self.balance += winnings
         return winnings, winning_lines
+
+
+    # def calculate_winnings(self):
+    #     winnings = 0
+    #     winning_lines = []
+        
+    #     for row_index, row in enumerate(self.slots):  # Iterate over rows in the slot configuration
+    #         # Check if all symbols in this row are the same
+    #         if row[0] == row[1] == row[2]:  # Compare symbols within the row
+    #             symbol = row[0]  # Get the symbol for this row
+    #             if symbol in self._symbol_value:  # Ensure symbol is valid
+    #                 line_winnings = self.bet * self._symbol_value[symbol]  # Calculate winnings for this row
+    #                 winnings += line_winnings
+    #                 winning_lines.append(row_index + 1)  # Add the row number (1-based index) to winning lines
+    #                 print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
+        
+    #     print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
+    #     self.balance += winnings # TBD my new fix (prior failure from the pytest execution)
+    #     return winnings, winning_lines
+
+
+
+
+
+
 
 ## Game Flow
 def play_game():
