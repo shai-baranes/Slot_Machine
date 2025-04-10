@@ -62,7 +62,7 @@ def get_slot_machine_spin(rows, cols, symbols):
 
 
 
-	columns = [] # columns = [[], [], []]
+	columns_arr = [] # columns = [[], [], []]
 	for col in range(cols): # can replace col w/ '_'
 		column = []
 		current_symbols = all_symbols[:] # [:] to create a copy instead of reference
@@ -71,9 +71,9 @@ def get_slot_machine_spin(rows, cols, symbols):
 			current_symbols.remove(value)
 			column.append(value)
 
-		columns.append(column)
+		columns_arr.append(column)
 
-	return columns
+	return columns_arr
 
 
 
