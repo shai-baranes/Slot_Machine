@@ -60,13 +60,13 @@
 ## additional clarifcations by Perplexity:
 
 ### 1)
-> **if isinstance(ValueError, type) and issubclass(expected, Exception)**:
+> **"if isinstance(ValueError, type) and issubclass(expected, Exception)"**:
 
 > is typically used to check whether the variable expected represents an exception class (not an instance of an exception, but the class itself).
 > that is also a subclasses of the base Exception class.
 
 ### 2)
-> the purpose of **monkeypatch.setattr('builtins.input', mock_input)**
+> the purpose of **"monkeypatch.setattr('builtins.input', mock_input)"**
  
 > is used in Python testing with the pytest framework to mock the behavior of the built-in input() function during a test. Let’s break it down step by step:
 
