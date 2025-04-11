@@ -43,3 +43,10 @@ symbol_count = {
 
 symbols = [s for s, count in symbol_count.items() for _ in range(count)]
 # ['A', 'A', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D']
+
+inputs = ["0", "100"]
+
+def mock_input(_):
+    return inputs.pop(0) if inputs else "invalid" # extract and provides the 1st item upon each call
+
+a = mock_input(4)  # each time called, it is exhusting the inputs list

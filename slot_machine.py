@@ -89,8 +89,8 @@ class SlotMachine:
                 bet = int(input("Bet per line: $"))
                 self._validate_bet(bet)
                 self.bet = bet
-                self.balance -= self.bet * self.lines  # Deduct when valid
-                # self.balance -= self.total_bet  # Deduct when valid
+                self.balance -= self.total_bet  # Deduct when valid
+                # self.balance -= self.bet * self.lines  # above same as this
                 return
             except ValueError as e:
                 print(f"Invalid bet: {e}")
@@ -124,33 +124,7 @@ class SlotMachine:
             print(" | ".join(col[row] for col in self.slots))
 
 
-
-    # def calculate_winnings(self):
-    #     winnings = 0
-    #     winning_lines = []
-        
-    #     # Iterate over each row (assuming a 3x3 grid)
-    #     for i, row_index in enumerate(range(3)):  # Check rows 0, 1, 2  # TBD maybe call row_index -> col_index instead?
-    #         # Get symbols from each column in this row
-    #         symbols = [
-    #             self.slots[0][row_index],  # Column 0, current row
-    #             self.slots[1][row_index],  # Column 1, current row
-    #             self.slots[2][row_index]   # Column 2, current row
-    #         ]
             
-    #         # Check if all symbols in this row are identical
-    #         if symbols[0] == symbols[1] == symbols[2]:
-    #             symbol = symbols[0]
-    #             if symbol in self._symbol_value:
-    #                 line_winnings = self.bet * self._symbol_value[symbol]
-    #                 winnings += line_winnings
-    #                 winning_lines.append(i + 1)  # 1-based index
-    #                 print(f"DEBUG: Row {i + 1} wins with symbol {symbol}, winnings: {line_winnings}")
-        
-    #     print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
-    #     self.balance += winnings
-    #     return winnings, winning_lines
-
 
     def calculate_winnings(self):
         winnings = 0
@@ -172,9 +146,9 @@ class SlotMachine:
                     line_winnings = self.bet * self._symbol_value[symbol]
                     winnings += line_winnings
                     winning_lines.append(row_index + 1)  # 1-based index
-                    print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
+                    # print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
         
-        print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
+        # print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
         self.balance += winnings # my new addition (TBD see that without it, the --runxfail is faling)
         return winnings, winning_lines
 

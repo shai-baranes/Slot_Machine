@@ -14,15 +14,16 @@ class TestDepositValidation:
     ])
     def test_deposit_validation(self, machine, inputs, expected, monkeypatch): # 'machine' from conftest.py
         def mock_input(_):
-            return inputs.pop(0) if inputs else "invalid"
+            return inputs.pop(0) if inputs else "invalid" # extract and provides the 1st item upon each call
 
-        monkeypatch.setattr('builtins.input', mock_input)
+        monkeypatch.setattr('builtins.input', mock_input) # part of the PyTest FW
+        # 'monkeypatch' allows you to temporarily modify or replace attributes, methods, or functions during a test. (auto-reverted after the test)
 
-        if isinstance(expected, type) and issubclass(expected, Exception):
+        if isinstance(expected, type) and issubclass(expected, Exception): # ensures that expected is a class and not an instance of a class (and this class {ValueError} is a subsype of 'Exception')
             with pytest.raises(expected):
                 machine.deposit(max_attempts=3)
         else:
-            machine.deposit(max_attempts=3)
+            machine.deposit(max_attempts=3) # machine.deposit method is running the input() upto 3 times
             assert machine.balance == expected
 
 
@@ -245,7 +246,7 @@ class TestEdgeCases:
 
 
     def test_max_win_scenario(self, initialized_machine):
-        initialized_machine.bet = SlotMachine.MAX_BET # calling the globals without instance...
+        initialized_machine.bet = SlotMachine.MAX_BET # calling  globals without instance...
         initialized_machine.lines = SlotMachine.MAX_LINES
         initialized_machine.spin()
         # Force all lines to win with symbol 'A'
