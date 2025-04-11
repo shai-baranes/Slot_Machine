@@ -196,8 +196,8 @@ class TestGameLogic:
         # Set initial balance, lines, and bet
         initialized_machine.balance = 900 # TBD now disabled
         # initialized_machine.balance = 1000 # TBD now disabled
-        # initialized_machine.lines = 2 # TBD now disabled
-        # initialized_machine.bet = 50 # TBD now disabled
+        initialized_machine.lines = 2 # TBD now disabled
+        initialized_machine.bet = 50 # TBD now disabled
 
         # Predefine a winning slot configuration (winning on lines 1 and 2)
 
@@ -223,9 +223,9 @@ class TestGameLogic:
         # assert initialized_machine.balance == 1000 - (50 * 2) + winnings
 
         # print(f"Slots: {initialized_machine.slots}")
-        # print(f"Winnings: {winnings}")
-        # print(f"Winning Lines: {winning_lines}")
-        # print(f"Balance: {initialized_machine.balance}")
+        print(f"Winnings: {winnings}")
+        print(f"Winning Lines: {winning_lines}")
+        print(f"Balance: {initialized_machine.balance}")
 
 
 

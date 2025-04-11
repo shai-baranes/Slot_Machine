@@ -5,8 +5,8 @@ import random
 class SlotMachine:
     ## Game Constants
     MAX_LINES = 3
-    MAX_BET = 100
-    MIN_BET = 1
+    MAX_BET = 100 # bet per line
+    MIN_BET = 1 # bet per line
     ROWS = 3
     COLS = 3
     
@@ -26,9 +26,9 @@ class SlotMachine:
 
     def __init__(self):
         self.balance = 0
-        self.lines = 0
-        self.bet = 0
-        self.slots = []
+        self.lines = 0 # Lines to bet on
+        self.bet = 0 # bet per line
+        self.slots = [] # the 2D matrix, injected by the spin() method
 
     ## Input Validation Methods
     def _validate_deposit(self, amount):
@@ -83,35 +83,40 @@ class SlotMachine:
     def place_bet(self):
         if self.balance <= 0:
             raise ValueError("Cannot place a bet with zero or negative balance.")
-        # Existing logic for placing bets
 
         while True:
             try:
                 bet = int(input("Bet per line: $"))
                 self._validate_bet(bet)
                 self.bet = bet
-                self.balance -= self.total_bet  # Deduct when valid
+                self.balance -= self.bet * self.lines  # Deduct when valid
+                # self.balance -= self.total_bet  # Deduct when valid
                 return
             except ValueError as e:
                 print(f"Invalid bet: {e}")
 
+
     ## Game Logic
-    @property
+    @property # this property enabling features such as data validation... (purpose here is be instead of class property that is calculated dependency)
     def total_bet(self):
         return self.bet * self.lines
 
+
+
     def spin(self):
-        symbols = [s for s, count in self._symbol_count.items() for _ in range(count)]
+        symbols = [s for s, count in self._symbol_count.items() for _ in range(count)] # ['A', 'A', 'B', 'B', 'B', 'B', 'C', 'C', 'C', 'C', 'C', 'C', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D']
         self.slots = []
         
         for _ in range(self.COLS):
             column = []
-            current_symbols = symbols.copy()
+            current_symbols = symbols.copy() # instead of symbols[:]
             for _ in range(self.ROWS):
                 symbol = random.choice(current_symbols)
                 current_symbols.remove(symbol)
                 column.append(symbol)
             self.slots.append(column)
+
+
 
     def display_result(self):
         print("\nSlot Results:")
@@ -170,29 +175,8 @@ class SlotMachine:
                     print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
         
         print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
-        self.balance += winnings
+        self.balance += winnings # my new addition (TBD see that without it, the --runxfail is faling)
         return winnings, winning_lines
-
-
-    # def calculate_winnings(self):
-    #     winnings = 0
-    #     winning_lines = []
-        
-    #     for row_index, row in enumerate(self.slots):  # Iterate over rows in the slot configuration
-    #         # Check if all symbols in this row are the same
-    #         if row[0] == row[1] == row[2]:  # Compare symbols within the row
-    #             symbol = row[0]  # Get the symbol for this row
-    #             if symbol in self._symbol_value:  # Ensure symbol is valid
-    #                 line_winnings = self.bet * self._symbol_value[symbol]  # Calculate winnings for this row
-    #                 winnings += line_winnings
-    #                 winning_lines.append(row_index + 1)  # Add the row number (1-based index) to winning lines
-    #                 print(f"DEBUG: Row {row_index + 1} wins with symbol {symbol}, winnings: {line_winnings}")
-        
-    #     print(f"DEBUG: Total winnings: {winnings}, Winning rows: {winning_lines}")
-    #     self.balance += winnings # TBD my new fix (prior failure from the pytest execution)
-    #     return winnings, winning_lines
-
-
 
 
 
