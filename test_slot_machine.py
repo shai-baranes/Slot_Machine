@@ -6,13 +6,13 @@ from slot_machine import SlotMachine
 
 # Test Classes
 class TestDepositValidation:
-    @pytest.mark.parametrize("inputs,expected", [
+    @pytest.mark.parametrize("inputs, expected", [
         (["0", "100"], 100),  # Invalid then valid
         (["abc", "50"], 50),  # Invalid then valid
         (["-5", "a", "20"], 20),  # Multiple invalid then valid
         (["invalid", "invalid", "invalid"], ValueError)  # All invalid inputs
     ])
-    def test_deposit_validation(self, machine, inputs, expected, monkeypatch):
+    def test_deposit_validation(self, machine, inputs, expected, monkeypatch): # 'machine' from conftest.py
         def mock_input(_):
             return inputs.pop(0) if inputs else "invalid"
 
@@ -27,7 +27,7 @@ class TestDepositValidation:
 
 
 class TestLineSelection:
-    @pytest.mark.parametrize("inputs,expected_lines,expected_error", [
+    @pytest.mark.parametrize("inputs, expected_lines, expected_error", [
         (["0", "2"], 2, None),  # Invalid then valid
         (["4", "3"], 3, None),  # Invalid then valid
         (["abc", "1"], 1, None),  # Invalid then valid
@@ -53,9 +53,9 @@ class TestBettingMechanics:
         (100, 2, 50, None),       # Valid bet
         (100, 2, 0, ValueError),  # Below minimum
         (100, 2, 101, ValueError),# Above maximum
-        (50, 2, 26, ValueError),  # Exceeds balance
+        (50, 2, 26, ValueError),  # Exceeds balance (in 2 lines)
         (100, 3, 33, None),       # Exact balance with valid total bet
-        (100, 3, 34, ValueError)  # Exceeds balance
+        (100, 3, 34, ValueError)  # Exceeds balance (in 3 lines)
     ])
     def test_bet_validation(self, machine, balance, lines, bet, expected_error):
         machine.balance = balance
@@ -82,9 +82,6 @@ class TestGameLogic:
     @pytest.mark.parametrize("slots_config, lines, bet, expected_winnings, expected_winning_lines", [
         # Winning configurations
         (
-            # [['D', 'D', 'D'],  # Row 1: Winning with 'D'
-            #  ['C', 'C', 'C'],  # Row 2: Winning with 'C'
-            #  ['B', 'B', 'B']],  # Row 3: Winning with 'B'
             [['D', 'C', 'B'],  # Row 1: Winning with 'D'
              ['D', 'C', 'B'],  # Row 2: Winning with 'C'
              ['D', 'C', 'B']],  # Row 3: Winning with 'B'            
@@ -95,9 +92,6 @@ class TestGameLogic:
             [1, 2, 3]  # Winning lines
         ),
         (
-            # [['A', 'A', 'A'],  # Row 1: Winning with 'A'
-            #  ['B', 'B', 'B'],  # Row 2: Winning with 'B'
-            #  ['C', 'C', 'C']],  # Row 3: Winning with 'C'
             [['A', 'B', 'C'],  # Row 1: Winning with 'A'
              ['A', 'B', 'C'],  # Row 2: Winning with 'B'
              ['A', 'B', 'C']],  # Row 3: Winning with 'C'            
@@ -106,11 +100,22 @@ class TestGameLogic:
             (10 * 5) + (10 * 4) + (10 * 3),  # Winnings: Line 1 ('A'), Line 2 ('B'), Line 3 ('C')
             [1, 2, 3]  # Winning lines
         ),
+
+        # --- I was hadding here another winning permutation w/ 2 lines winnig
+        (
+            [['A', 'B', 'A'],  # Row 1: Winning with 'A'
+             ['A', 'B', 'B'],  # Row 2: Winning with 'B'
+             ['A', 'B', 'C']],  # Row 3: Winning with 'C'            
+            3,
+            20,
+            (20 * 5) + (20 * 4),  # Winnings: Line 1 ('A'), Line 2 ('B'), Line 3 ('C')
+            [1, 2]  # Winning lines
+        ),
+
+        # ---
+
         # Non-winning configurations
         (
-            # [['A', 'B', 'C'],  # Row 1: No win
-            #  ['D', 'C', 'B'],  # Row 2: No win
-            #  ['A', 'D', 'C']],  # Row 3: No win
             [['A', 'D', 'A'],  # Row 1: No win
              ['B', 'C', 'D'],  # Row 2: No win
              ['C', 'B', 'C']],  # Row 3: No win
@@ -191,7 +196,7 @@ class TestGameLogic:
 #     return machine
 # ----
 
-    @pytest.mark.xfail
+    @pytest.mark.xfail  # it now appeares as 'XPASS' in report after was fixing the issues/bugs
     def test_balance_adjustments(self, initialized_machine):
         # Set initial balance, lines, and bet
         initialized_machine.balance = 900 # TBD now disabled
@@ -240,7 +245,7 @@ class TestEdgeCases:
 
 
     def test_max_win_scenario(self, initialized_machine):
-        initialized_machine.bet = SlotMachine.MAX_BET
+        initialized_machine.bet = SlotMachine.MAX_BET # calling the globals without instance...
         initialized_machine.lines = SlotMachine.MAX_LINES
         initialized_machine.spin()
         # Force all lines to win with symbol 'A'
