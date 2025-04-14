@@ -16,7 +16,7 @@
 
 
 
-## added notes by Perplexity:
+## Added notes by Perplexity:
 
 > Key features used:
 > 
@@ -57,7 +57,7 @@
 
 
 
-## additional clarifcations by Perplexity:
+## Additional clarifcations by Perplexity:
 
 ### 1)
 > **"if isinstance(ValueError, type) and issubclass(expected, Exception)"**:
@@ -87,4 +87,4 @@
 
 ## Later I was adding workflow support (job upon commit);
 
-> refer to to the new added file (and associated sub-folders): pytest.yml *(under .github/workflows)*
+> Refer to to the new added file (and associated sub-folders): pytest.yml *(under .github/workflows)*

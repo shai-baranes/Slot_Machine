@@ -27,7 +27,3 @@ jobs:
     - name: Run Pytest
       run: |
         pytest --verbose --disable-warnings
-
-
-env:
-  MY_ENV_VAR: ${{ github.repository }}
