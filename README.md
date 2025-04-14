@@ -88,3 +88,21 @@
 ## Later I was adding workflow support (job upon commit);
 
 > Refer to to the new added file (and associated sub-folders): pytest.yml *(under .github/workflows)*
+> *(with some help by: 'perplexity')*
+
+
+
+## pytest-cov:
+
+> Python lib () added to requirements.txt enabling to get the coverage report,
+> for understanding what coverage of the code lines a specific test suite file went through.
+> See example report when runnig: **"pytest --cov"**: *(can also go w/ the full known report: pytest --cov -v)*
+
+   ### Addition optional args:
+
+	> - **pytest --cov=test_shopping_cart_perplexity**   (for running a single test file)
+	> - **pytest --cov=test_shopping_cart_perplexity** --cov=test_shoppint_cart (running multiple files)
+
+	> - **pytest --cov=. --cov-report=term-missing**   (issue report on all files w/ the missing lines - see below example)
+	> - **pytest --cov=shopping_cart --cov-report=term-missing**   (issue report on a file of interest w/ the missing lines - see the following example)
+

@@ -26,4 +26,5 @@ jobs:
 
     - name: Run Pytest
       run: |
+        pytest --cov=. --cov-report=term-missing
         pytest --verbose --disable-warnings
