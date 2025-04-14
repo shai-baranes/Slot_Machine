@@ -3,8 +3,8 @@ name: Run Pytest
 on:
   push:
     branches:
-      - main
       - from_perplexity
+      - main
 
 jobs:
   test:
@@ -27,3 +27,7 @@ jobs:
     - name: Run Pytest
       run: |
         pytest --verbose --disable-warnings
+
+
+env:
+  MY_ENV_VAR: ${{ github.repository }}
