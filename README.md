@@ -12,7 +12,7 @@
 > the code:  (TBD get the code from main prior to branch)> 
 
 ## PyTest followup prompt:
-> using pytest and its functions, such as fixtures parametrize raises and mark, wherever necessary, and test this code.
+> test this code using pytest and its functions, such as fixtures parametrize raises and mark, wherever necessary.
 
 
 
@@ -83,3 +83,8 @@
 > 3. Replacement: mock_input
 > The value passed as the replacement (mock_input) is typically a mock function or object that simulates user input. This allows you to control what input() > will return during the test without requiring actual user interaction.
 
+
+
+## Later I was adding workflow support (job upon commit);
+
+> refer to to the new added file (and associated sub-folders): pytest.yml *(under .github/workflows)*
