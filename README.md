@@ -105,4 +105,5 @@
 
 	> - **pytest --cov=. --cov-report=term-missing**   (issue report on all files w/ the missing lines - see below example)
 	> - **pytest --cov=shopping_cart --cov-report=term-missing**   (issue report on a file of interest w/ the missing lines)
+	> - **pytest --cov=. --cov-report=html  --cov-report=term-missing**   (issue an informative report in a lovely HTML format - w/ links)
 
