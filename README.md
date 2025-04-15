@@ -104,5 +104,5 @@
 	> - **pytest --cov=test_shopping_cart_perplexity** --cov=test_shoppint_cart (running multiple files)
 
 	> - **pytest --cov=. --cov-report=term-missing**   (issue report on all files w/ the missing lines - see below example)
-	> - **pytest --cov=shopping_cart --cov-report=term-missing**   (issue report on a file of interest w/ the missing lines - see the following example)
+	> - **pytest --cov=shopping_cart --cov-report=term-missing**   (issue report on a file of interest w/ the missing lines)
 

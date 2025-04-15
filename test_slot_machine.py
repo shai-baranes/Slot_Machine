@@ -77,7 +77,6 @@ class TestBettingMechanics:
 
 
 
-import pytest
 
 class TestGameLogic:
     @pytest.mark.parametrize("slots_config, lines, bet, expected_winnings, expected_winning_lines", [
