@@ -8,7 +8,7 @@ from slot_machine import SlotMachine
 class TestDepositValidation:
     @pytest.mark.parametrize("inputs, expected", [
         (["0", "100"], 100),  # Invalid then valid
-        (["abc", "50"], 50),  # Invalid then valid
+        (["abc", "50"], 50),  # Invalid then display_result
         (["-5", "a", "20"], 20),  # Multiple invalid then valid
         (["invalid", "invalid", "invalid"], ValueError)  # All invalid inputs
     ])

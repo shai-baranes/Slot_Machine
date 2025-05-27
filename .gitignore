@@ -1,3 +1,5 @@
 .coverage
 env_slot_machine
 __pycache__
+test_slot_machine.sublime-project
+test_slot_machine.sublime-workspace
